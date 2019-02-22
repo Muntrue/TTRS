@@ -1,0 +1,75 @@
+body, html {
+    background-color: #000;
+    margin:           0;
+    padding:          0;
+}
+
+#pregame, #lobby {
+    position:              absolute;
+    width:                 500px;
+    height:                300px;
+    background-color:      #b8b8b8;
+    margin:                auto;
+    top:                   calc(50% - 150px);
+    left:                  calc(50% - 250px);
+    -webkit-border-radius: 20px;
+    -moz-border-radius:    20px;
+    border-radius:         20px;
+    text-align:            center;
+}
+
+#pregame > div, #lobby > div {
+    padding: 20px;
+}
+
+#pregame > div > h1, #lobby > div > h1 {
+    margin:  0;
+    padding: 0;
+}
+
+#pregame > div > div.room-number {
+    margin: auto;
+    margin-top: 20px;
+    width: 50%;
+}
+
+#pregame > div > div.room-number > input {
+    text-align: center;
+}
+
+#grid {
+    border: 1px solid #fff;
+    margin: auto;
+}
+
+#grid .grid-row{
+    clear:both;
+    margin:0;
+}
+
+#grid .grid-cell{
+
+    float:left;
+    margin:0;
+    padding:0;
+}
+
+.red{
+    background-color: #ff0000;
+}
+
+.blue{
+    background-color: #0000ff;
+}
+
+.green{
+    background-color: #00ff00;
+}
+
+.yellow{
+    background-color: #f0f000;
+}
+
+.purple{
+    background-color: #f00084;
+}

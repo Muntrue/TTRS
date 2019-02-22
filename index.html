@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible"
+              content="ie=edge">
+        <title>TTRS</title>
+        <script type="text/javascript"
+                src="./client/client.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <link rel="Stylesheet"
+              href="./client/client.css">
+        <script src="./components/lobby.js"></script>
+    </head>
+    <body>
+        <div id="app">
+
+            <div id="grid" class="mt-4" v-if="gameState.grid" v-bind:style="{width: rowWidth + 'px'}">
+                <div v-for="row in gameState.grid" class="grid-row" v-bind:style="{width: rowWidth + 'px'}">
+                    <div v-for="column in row" class="grid-cell" v-bind:style="{width: blockDimensions + 'px', height: blockDimensions + 'px'}"
+                    v-bind:class="{'black' : column === 0,
+                    'red' : column === 1,
+                    'green' : column === 2,
+                    'blue' : column === 3,
+                    'yellow' : column === 4,
+                    'purple' : column === 5}">
+                    </div>
+                    <div v-bind:style="{width: rowWidth + 'px'}" style="clear:both;"></div>
+                </div>
+            </div>
+
+            <lobby :socket="socket"
+                   :gamestate="gameState"
+                   v-if="showLobby && !gameState.grid"></lobby>
+
+            <div id="pregame"
+                 v-if="!showLobby">
+                <div>
+                    <h1>TTRS</h1>
+
+                    <div class="input-group input-group-lg room-number">
+                        <input type="text"
+                               class="form-control"
+                               v-model="randomRoom"
+                               placeholder="ROOM Number"
+                               aria-label="Sizing example input"
+                               maxlength="6"
+                               aria-describedby="inputGroup-sizing-lg">
+                    </div>
+                </div>
+
+                <button type="button"
+                        class="btn btn-info"
+                        @click="connect">Connect
+                </button>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        Vue.config.devtools = true;
+        new Client();
+    </script>
+</html>
