@@ -26,11 +26,11 @@
                 <div v-for="row in gameState.grid" class="grid-row" v-bind:style="{width: rowWidth + 'px'}">
                     <div v-for="column in row" class="grid-cell" v-bind:style="{width: blockDimensions + 'px', height: blockDimensions + 'px'}"
                     v-bind:class="{'black' : column === 0,
-                    'red' : column === 1,
-                    'green' : column === 2,
-                    'blue' : column === 3,
-                    'yellow' : column === 4,
-                    'purple' : column === 5}">
+                    'red' : column[0] === 1,
+                    'green' : column[0] === 2,
+                    'blue' : column[0] === 3,
+                    'yellow' : column[0] === 4,
+                    'purple' : column[0] === 5}">
                     </div>
                     <div v-bind:style="{width: rowWidth + 'px'}" style="clear:both;"></div>
                 </div>

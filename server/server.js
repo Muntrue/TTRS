@@ -20,8 +20,8 @@ class SocketConnection {
      * @param socket
      */
     constructor(socket) {
-        this.socket = socket;
-        this.room   = socket.handshake.query.room;
+        this.socket    = socket;
+        this.room      = socket.handshake.query.room;
         this.gameSpeed = 1000;
 
         this.socket.join(this.room);
@@ -39,9 +39,41 @@ class SocketConnection {
         this.gameLoop();
     }
 
+    introduceGamePiece() {
+
+        const piece = [
+            [ [0, 0],[0, 0],[0, 0],[0, 2],[0, 0],[0, 2],[0, 0],[0, 0],[0, 0],[0, 0] ],
+            [ [0, 0],[0, 0],[0, 0],[3, 2],[3, 2],[3, 2],[0, 0],[0, 0],[0, 0],[0, 0] ],
+            [ [0, 0],[0, 0],[0, 0],[0,0],[3, 2],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0] ]
+        ];
+
+        let grid = gameState[this.room].grid;
+        grid.splice(0, 3, ...piece);
+
+        gameState[this.room].grid = grid;
+
+    };
+
+    updateGamePiece() {
+        let pieceIndex = null;
+        if (!gameState[this.room].grid) {
+            return;
+        }
+
+        gameState[this.room].grid.forEach(function(row, index){
+            row.forEach(function(cell){
+                if(cell[1] === 2 && !pieceIndex) pieceIndex = index;
+            });
+        });
+
+        gameState[this.room].grid.splice(0,0,[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]]);
+        gameState[this.room].grid.pop();
+
+    }
+
     initGamestateForRoom(room) {
 
-        if(! gameState[room]){
+        if (!gameState[room]) {
             gameState[room] = {
                 players: {},
                 grid: null
@@ -53,6 +85,7 @@ class SocketConnection {
 
     gameLoop() {
         this.gameLoopObj = setInterval(() => {
+            this.updateGamePiece();
             this.publishGameState();
         }, 500);
     }
@@ -73,13 +106,15 @@ class SocketConnection {
             this.disconnect();
         });
 
-        this.socket.on('setPlayerReady', () => {
+        this.socket.on("setPlayerReady", () => {
             gameState[this.room].players[this.socket.id].ready = true;
         });
 
-        this.socket.on('startGame', () => {
+        this.socket.on("startGame", () => {
             this.dev.log("Game started");
+
             gameState[this.room].grid = this.initGrid();
+            this.introduceGamePiece();
         });
     }
 
@@ -105,7 +140,10 @@ class SocketConnection {
         for (let h = 0; h < fieldHeight; h++) {
             const row = [];
             for (let w = 0; w < fieldWidth; w++) {
-                row.push(0);
+                row.push([
+                    0,
+                    0
+                ]);
             }
             grid.push(row);
         }
@@ -114,12 +152,12 @@ class SocketConnection {
     }
 }
 
-class Player{
+class Player {
     constructor(room) {
         return {
             name: Object.keys(room.players).length === 0 ? "Player 1" : "Player 2",
             ready: false
-        }
+        };
     }
 }
 

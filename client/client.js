@@ -65,12 +65,10 @@ class Client {
 
                     this.socket.on("receiveSessionId", (msg) => {
                         this.sessionId = msg;
-                        console.table(this.grid);
                     });
 
                     this.socket.on("receiveGamestate", (msg) => {
                         this.gameState = msg;
-                        console.table(this.gameState.grid);
                     });
                 }
             }
